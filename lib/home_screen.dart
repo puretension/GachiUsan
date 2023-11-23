@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 controller.addOverlayAll({marker});
 
                 final onMarkerInfoWindow =
-                    NInfoWindow.onMarker(id: 'u1', text: '우산');
+                    NInfoWindow.onMarker(id: 'u1', text: '우산우산');
                 marker.openInfoWindow(onMarkerInfoWindow);
               },
             ),
