@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
 
               },
-              buttonName: '대여하기',
+              buttonName: '대여',
               isButtonEnabled: true,
             ),
           ),
