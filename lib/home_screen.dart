@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: const Color(0xFF61B2E4),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                height: 119,
+                height: 120,
                 width: 300,
                 alignment: Alignment.topLeft,
                 child: Padding(
