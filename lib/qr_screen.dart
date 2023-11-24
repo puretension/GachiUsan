@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mow/result_screen.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScreen extends StatefulWidget {
@@ -16,6 +18,32 @@ class _QRScreenState extends State<QRScreen> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) async {
+      // QR 코드 스캔을 일시 중지
+      await controller.pauseCamera();
+
+      setState(() {
+        result = scanData;
+      });
+
+      if (result?.code == 'https://m.site.naver.com/1ghRB') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ResultScreen(),
+          ),
+        );
+      } else {
+        // 필요한 경우, 여기서 다시 스캐너를 시작할 수 있습니다.
+        // await controller.resumeCamera();
+      }
+    });
+  }
+
 
   @override
   void reassemble() {
@@ -41,7 +69,9 @@ class _QRScreenState extends State<QRScreen> {
                 children: <Widget>[
                   if (result != null)
                     Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                        '')
+                    // Text(
+                    //     'Data: ${result!.code}')
                   else
                     Column(
                       children: [
@@ -56,7 +86,7 @@ class _QRScreenState extends State<QRScreen> {
                           'QR코드는 스테이션의 상단에 위치해있어요!',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 16,
                           ),
                         ),
                       ],
@@ -66,64 +96,41 @@ class _QRScreenState extends State<QRScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
-                              },
-                            )),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.flipCamera();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getCameraInfo(),
-                              builder: (context, snapshot) {
-                                if (snapshot.data != null) {
-                                  return Text(
-                                      'Camera facing ${describeEnum(snapshot.data!)}');
-                                } else {
-                                  return const Text('loading');
-                                }
-                              },
-                            )),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.pauseCamera();
+                        margin: const EdgeInsets.all(16),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pop(); // This will navigate back
                           },
-                          child: const Text('pause',
-                              style: TextStyle(fontSize: 20)),
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/img/back.svg'),
+                              Text(
+                                '뒤로 가기',
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.resumeCamera();
+                        margin: const EdgeInsets.all(16),
+                        child: InkWell(
+                          onTap: () async {
+                            await controller?.toggleFlash();
+                            setState(() {});
                           },
-                          child: const Text('resume',
-                              style: TextStyle(fontSize: 20)),
+                          child: Column(
+                            children: [
+                              Image.asset('assets/img/flash.png'),
+                              Text(
+                                '손전등',
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -154,17 +161,6 @@ class _QRScreenState extends State<QRScreen> {
           cutOutSize: scanArea),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {

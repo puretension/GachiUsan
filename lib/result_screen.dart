@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:mow/home_screen.dart';
 import 'package:mow/login_next_button.dart';
 import 'package:mow/released_screen.dart';
 
 class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key});
+  // final BluetoothDevice device; // Reference to the connected device
+  // final BluetoothCharacteristic characteristic; // Reference to the characteristic
+
+  // const ResultScreen({super.key, required this.device, required this.characteristic});
+
+  const ResultScreen({super.key,});
+
+  // Future<void> _writeToCharacteristic() async {
+  //   try {
+  //     await characteristic.write([1]);
+  //     print('Data written to characteristic');
+  //   } catch (e) {
+  //     print('Error writing to characteristic: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    // _writeToCharacteristic();
     // 현재 시간 가져오기
     DateTime now = DateTime.now();
     // 원하는 포맷으로 시간 포맷하기 (예: 'HH시 mm분')
