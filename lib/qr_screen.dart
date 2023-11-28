@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mow/main.dart';
 import 'package:mow/result_screen.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -19,31 +20,36 @@ class _QRScreenState extends State<QRScreen> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
+  // QRScreen 클래스 내에서
+
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) async {
-      // QR 코드 스캔을 일시 중지
-      await controller.pauseCamera();
+    this.controller = controller;
+    controller.scannedDataStream.listen(
+            (scanData) async {
+          await controller.pauseCamera();
+          setState(() {
+            result = scanData;
+          });
 
-      setState(() {
-        result = scanData;
-      });
+          if (result?.code == 'https://m.site.naver.com/1gqWT') {
+            // 조건에 맞을 때 블루투스 장치에 '1' 전송
+            var capstoneDevice = await connectToCapstone();
+            if (capstoneDevice != null && capstoneDevice.remoteId.toString() == "AD083497-5257-1F15-8ADE-A6725E6FD885") {
+              await sendDataToCapstone(capstoneDevice, '1');
+              print('puretension');
+            }
 
-      if (result?.code == 'https://m.site.naver.com/1ghRB') {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ResultScreen(),
-          ),
-        );
-      } else {
-        // 필요한 경우, 여기서 다시 스캐너를 시작할 수 있습니다.
-        // await controller.resumeCamera();
-      }
-    });
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ResultScreen(),
+              ),
+            );
+          } else {
+            // 필요한 경우, 여기서 다시 스캐너를 시작할 수 있습니다.
+            // await controller.resumeCamera();
+          }
+        });
   }
-
 
   @override
   void reassemble() {
@@ -68,10 +74,9 @@ class _QRScreenState extends State<QRScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   if (result != null)
-                    Text(
-                        '')
-                    // Text(
-                    //     'Data: ${result!.code}')
+                    Text('')
+                  // Text(
+                  //     'Data: ${result!.code}')
                   else
                     Column(
                       children: [
