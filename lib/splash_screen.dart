@@ -12,18 +12,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  // 로딩 화면 보여줄때(프로토 타입용)
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // 2초 후에 HomeScreen으로 전환
-  //   Future.delayed(Duration(seconds: 2), () {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => HomeScreen()),
-  //     );
-  //   });
-  // }
+//  로딩 화면 보여줄때(프로토 타입용)
+  @override
+  void initState() {
+    super.initState();
+    // 2초 후에 HomeScreen으로 전환
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(

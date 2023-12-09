@@ -178,7 +178,7 @@ class MyApp extends StatelessWidget {
     // List<String> avaiablePort = SerialPort.availablePorts;
     return ScreenUtilInit(
       designSize: Size(375, 812),
-      child: HomeScreen(),
+      child: SplashScreen(),
       // child: QRScreen(),
     );
   }
