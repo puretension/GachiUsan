@@ -43,8 +43,13 @@ dependencies:
   get: ^4.5.5
   flutter_blue_plus: ^1.29.6
   libserialport: ^0.3.0+1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/img/applogo.png"
   flutter_test:
     sdk: flutter
 
