@@ -31,7 +31,7 @@ class _QRScreenState extends State<QRScreen> {
             result = scanData;
           });
 
-          if (result?.code == 'https://m.site.naver.com/1gqWT') {
+          if (result?.code == 'https://m.site.naver.com/1gNdI') {
             // 조건에 맞을 때 블루투스 장치에 '1' 전송
             var capstoneDevice = await connectToCapstone();
             if (capstoneDevice != null && capstoneDevice.remoteId.toString() == "AD083497-5257-1F15-8ADE-A6725E6FD885") {
