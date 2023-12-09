@@ -39,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: _passwordController,
               hintText: '6자 이상의 영문/숫자 조합',
               onChanged: (String value) {},
+              obscureText: true,
             ),
             SizedBox(height: 20),
             LoginNextButton(
